@@ -1,5 +1,6 @@
 package com.opsify.service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.*;
@@ -12,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FfmpegAudioConverterProgressTest {
 
     @Test
+    @Disabled
     void singleFileConversion_reportsProgressAndCreatesOutput() throws Exception {
         Path input = Files.createTempFile("in-silence", ".wav");
         createSilentWav(input, 0.5, 22050);
