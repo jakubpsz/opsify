@@ -1,0 +1,5 @@
+.root { -fx-font-family: 'Segoe UI', 'Inter', sans-serif; -fx-background-color: #f7f8fb; }
+.title { -fx-font-size: 22px; -fx-font-weight: 700; -fx-padding: 12 0 16 0; }
+.button { -fx-background-radius: 8; }
+.text-area { -fx-background-radius: 8; }
+.progress-bar > .bar { -fx-background-radius: 8; }
