@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static com.opsify.util.PathAudioUtil.*;
@@ -31,47 +32,65 @@ public class FfmpegAudioConverter {
         convert(input, outputDir, targetExt, null);
     }
 
-    /** Convert with optional progress listener. */
-    public void convert(@NonNull Path input, @NonNull Path outputDir, @NonNull String targetExt, ConversionListener listener) throws IOException {
+    public void convert(@NonNull Path input,
+                        @NonNull Path outputDir,
+                        @NonNull String targetExt,
+                        ConversionListener listener) throws IOException {
         log.info("Starting conversion: input={}, outputDir={}, targetExt={}", input, outputDir, targetExt);
         ensureDir(outputDir);
-        if (Files.isRegularFile(input)) {
-            if (listener != null) listener.onStart(1);
-            Path out = mapToOutput(input.getParent() == null ? Path.of("") : input.getParent(), input, outputDir, targetExt);
+
+        List<Path> files = collectAudioFiles(input);  // recursive file collector
+        int total = files.size();
+        if (total == 0) {
+            throw new IOException("No audio files found in: " + input);
+        }
+
+        if (listener != null) listener.onStart(total);
+
+        AtomicInteger done = new AtomicInteger(0);
+
+        files.parallelStream()
+                .forEach(p -> processFile(input, outputDir, targetExt, listener, p, done, total));
+
+        log.info("Finished conversion for {} ({} of {} done)", input, done.get(), total);
+    }
+
+    private void processFile(Path input, Path outputDir, String targetExt, ConversionListener listener, Path p, AtomicInteger done, int total) {
+        try {
+            Path out = mapToOutput(input, p, outputDir, targetExt);
             out = unique(out);
             ensureParent(out);
-            this.transcodeAudio(input, out, targetExt);
-            log.info("Converted file: {} -> {}", input, out);
-            if (listener != null) listener.onFileDone(input, out, 1, 1);
-            return;
+
+            this.transcodeAudio(p, out, targetExt);
+
+            int current = done.incrementAndGet();
+            log.info("Converted file: {} -> {}", p, out);
+            if (listener != null) listener.onFileDone(p, out, current, total);
+
+        } catch (Exception e) {
+            int current = done.incrementAndGet();
+            log.error("Failed to convert {}: {}", p, e.getMessage());
+            if (listener != null) listener.onError(p, e, current, total);
         }
-        if (Files.isDirectory(input)) {
-            List<Path> files = new ArrayList<>();
-            try (Stream<Path> s = Files.walk(input)) {
-                s.filter(Files::isRegularFile).filter(PathAudioUtil::isAudio).forEach(files::add);
-            }
-            int total = files.size();
-            if (listener != null) listener.onStart(total);
-            int done = 0;
-            for (Path p : files) {
-                try {
-                    Path out = mapToOutput(input, p, outputDir, targetExt);
-                    out = unique(out);
-                    ensureParent(out);
-                    this.transcodeAudio(p, out, targetExt);
-                    done++;
-                    log.info("Converted file: {} -> {}", p, out);
-                    if (listener != null) listener.onFileDone(p, out, done, total);
-                } catch (Exception e) {
-                    log.error("Failed to convert {}: {}", p, e.getMessage());
-                    if (listener != null) listener.onError(p, e, done, total);
+    }
+
+    /**
+     * Recursively collects all audio files under a directory or single file.
+     */
+    private List<Path> collectAudioFiles(Path input) throws IOException {
+        List<Path> result = new ArrayList<>();
+        if (Files.isRegularFile(input) && PathAudioUtil.isAudio(input)) {
+            result.add(input);
+        } else if (Files.isDirectory(input)) {
+            try (Stream<Path> s = Files.list(input)) {
+                for (Path p : (Iterable<Path>) s::iterator) {
+                    result.addAll(collectAudioFiles(p));  // recursion
                 }
             }
-            log.info("Finished directory conversion for {} ({} of {} done)", input, done, total);
-            return;
         }
-        throw new IOException("Input does not exist: " + input);
+        return result;
     }
+
 
     /** Transcode audio using JavaCV (bundled FFmpeg), no external ffmpeg binary required. */
     protected void transcodeAudio(Path input, Path output, String targetExt) throws IOException {
