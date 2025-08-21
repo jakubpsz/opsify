@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.opsify</groupId>
-  <artifactId>audio-converter-app</artifactId>
+  <artifactId>opsify</artifactId>
   <version>1.0.0</version>
   <name>Audio Converter App</name>
   <packaging>jar</packaging>

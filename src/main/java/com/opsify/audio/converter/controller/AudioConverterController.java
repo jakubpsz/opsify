@@ -41,11 +41,6 @@ public class AudioConverterController {
     private final ExecutorService exec = Executors.newSingleThreadExecutor();
     private final AudioConverterService converter;
 
-    // Default constructor for JavaFX
-    public AudioConverterController() {
-        this(new AudioConverterService());
-    }
-
     // Constructor injection (used in tests)
     public AudioConverterController(AudioConverterService converter) {
         this.converter = converter;
@@ -90,45 +85,61 @@ public class AudioConverterController {
         String out = outputField.getText();
         String fmt = formatCombo.getValue();
         if (in == null || in.isBlank() || out == null || out.isBlank() || fmt == null || fmt.isBlank()) {
-            alert(Constants.MSG_SELECT_INPUT_OUTPUT_FORMAT);
+            alert();
             return;
         }
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         convertButton.setDisable(true);
-        exec.submit(() -> {
-            try {
-                append(Constants.LOG_STARTING + "\n");
-                converter.convert(Path.of(in), Path.of(out), fmt, new ConversionListener() {
-                    int total = 0;
-                    @Override public void onStart(int t) { total = t; updateProgress(0, total); }
-                    @Override public void onFileDone(Path input, Path output, int done, int t) {
-                        append(Constants.LOG_DONE_PREFIX + input + " -> " + output + "\n");
-                        updateProgress(done, total);
-                    }
-                    @Override public void onError(Path input, Exception e, int done, int t) {
-                        append(Constants.LOG_ERROR_PREFIX + input + " :: " + e.getMessage() + "\n");
-                        updateProgress(done, total);
-                    }
-                    void updateProgress(int done, int total) {
-                        Platform.runLater(() -> progressBar.setProgress(total == 0 ? 0 : (double) done / total));
-                    }
-                });
-                append(Constants.LOG_FINISHED + "\n");
-            } catch (Exception e) {
-                log.error("Conversion error", e);
-                append(Constants.LOG_ERROR_GENERIC_PREFIX + e.getMessage() + "\n");
-            } finally {
-                Platform.runLater(() -> convertButton.setDisable(false));
-                exec.shutdown();
+        exec.submit(() -> runConversion(in, out, fmt));
+    }
+
+    private void runConversion(String in, String out, String fmt) {
+        try {
+            append(Constants.LOG_STARTING + "\n");
+            converter.convert(Path.of(in), Path.of(out), fmt, getListener());
+            append(Constants.LOG_FINISHED + "\n");
+        } catch (Exception e) {
+            log.error("Conversion error", e);
+            append(Constants.LOG_ERROR_GENERIC_PREFIX + e.getMessage() + "\n");
+        } finally {
+            Platform.runLater(() -> convertButton.setDisable(false));
+            exec.shutdown();
+        }
+    }
+
+    private ConversionListener getListener() {
+        return new ConversionListener() {
+            int total = 0;
+
+            @Override
+            public void onStart(int t) {
+                total = t;
+                updateProgress(0, total);
             }
-        });
+
+            @Override
+            public void onFileDone(Path input, Path output, int done, int t) {
+                append(Constants.LOG_DONE_PREFIX + input + " -> " + output + "\n");
+                updateProgress(done, total);
+            }
+
+            @Override
+            public void onError(Path input, Exception e, int done, int t) {
+                append(Constants.LOG_ERROR_PREFIX + input + " :: " + e.getMessage() + "\n");
+                updateProgress(done, total);
+            }
+
+            void updateProgress(int done, int total) {
+                Platform.runLater(() -> progressBar.setProgress(total == 0 ? 0 : (double) done / total));
+            }
+        };
     }
 
     private void append(String text) {
         Platform.runLater(() -> logArea.appendText(text));
     }
 
-    private void alert(String msg) {
-        new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK).showAndWait();
+    private void alert() {
+        new Alert(Alert.AlertType.WARNING, Constants.MSG_SELECT_INPUT_OUTPUT_FORMAT, ButtonType.OK).showAndWait();
     }
 }

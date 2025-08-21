@@ -10,7 +10,7 @@ public final class Constants {
 
     // Application
     public static final String APP_TITLE = "Opsify";
-    public static final String LOGO = "/logo/logo_no_name.png";
+    public static final String LOGO = "/logo/simpler_logo.png";
 
     // Resources
     public static final String FXML_MAIN = "/fxml/audio-converter.fxml";
