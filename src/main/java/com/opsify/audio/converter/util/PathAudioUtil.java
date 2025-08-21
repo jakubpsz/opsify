@@ -1,4 +1,4 @@
-package com.opsify.util;
+package com.opsify.audio.converter.util;
 
 import java.io.IOException;
 import java.nio.file.*;

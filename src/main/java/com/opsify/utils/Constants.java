@@ -1,4 +1,4 @@
-package com.opsify.util;
+package com.opsify.utils;
 
 import java.util.List;
 
@@ -9,10 +9,11 @@ public final class Constants {
     private Constants() {}
 
     // Application
-    public static final String APP_TITLE = "Audio Converter";
+    public static final String APP_TITLE = "Opsify";
+    public static final String LOGO = "/logo/simpler_logo.png";
 
     // Resources
-    public static final String FXML_MAIN = "/fxml/main.fxml";
+    public static final String FXML_MAIN = "/fxml/audio-converter.fxml";
     public static final String CSS_MAIN = "/css/style.css";
 
     // UI messages

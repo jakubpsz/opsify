@@ -1,4 +1,6 @@
-# Audio Converter App
+# Opsify
+
+![Audio Converter Logo](docs/logo.png)
 
 JavaFX desktop application for batch audio conversion using JavaCV (bundled FFmpeg). Includes progress reporting and logging.
 

@@ -2,21 +2,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.controller.MainController" spacing="12" alignment="TOP_LEFT">
-    <Label text="Audio Converter" styleClass="title"/>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.audio.converter.controller.AudioConverterController" spacing="12" alignment="TOP_LEFT">
+    <HBox alignment="CENTER">
+        <Label fx:id="titleLabel" text="Audio Converter" styleClass="title"/>
+    </HBox>
     <GridPane hgap="8" vgap="8">
         <columnConstraints>
             <ColumnConstraints percentWidth="25"/>
             <ColumnConstraints percentWidth="75"/>
         </columnConstraints>
-        <Label text="Input (file or dir)"/>
+        <Label text="Input"/>
         <HBox GridPane.columnIndex="1" spacing="6">
             <TextField fx:id="inputField" promptText="Path..."/>
             <Button text="Choose File" onAction="#chooseInputFile"/>
             <Button text="Choose Dir" onAction="#chooseInputDir"/>
         </HBox>
 
-        <Label text="Output directory" GridPane.rowIndex="1"/>
+        <Label text="Output" GridPane.rowIndex="1"/>
         <HBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="6">
             <TextField fx:id="outputField" promptText="Path..."/>
             <Button text="Choose" onAction="#chooseOutputDir"/>
@@ -28,9 +30,8 @@
 
     <HBox spacing="8">
         <Button fx:id="convertButton" text="Convert" onAction="#convert"/>
-        <ProgressBar fx:id="progressBar" prefWidth="300"/>
+        <ProgressBar fx:id="progressBar" prefWidth="400"/>
     </HBox>
 
-    <Label text="Log"/>
     <TextArea fx:id="logArea" prefRowCount="12"/>
 </VBox>
