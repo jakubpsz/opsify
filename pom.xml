@@ -5,7 +5,7 @@
   <groupId>com.opsify</groupId>
   <artifactId>opsify</artifactId>
   <version>1.0.0</version>
-  <name>Audio Converter App</name>
+  <name>Opsify</name>
   <packaging>jar</packaging>
 
   <properties>

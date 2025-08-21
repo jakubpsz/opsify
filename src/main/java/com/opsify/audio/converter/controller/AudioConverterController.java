@@ -41,9 +41,8 @@ public class AudioConverterController {
     private final ExecutorService exec = Executors.newSingleThreadExecutor();
     private final AudioConverterService converter;
 
-    // Constructor injection (used in tests)
-    public AudioConverterController(AudioConverterService converter) {
-        this.converter = converter;
+    public AudioConverterController () {
+        this.converter = new AudioConverterService();
     }
 
     @FXML
