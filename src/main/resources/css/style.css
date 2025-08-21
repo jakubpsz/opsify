@@ -1,22 +1,28 @@
 .root {
-    -fx-font-family: 'Segoe UI', 'Inter', sans-serif;
+    -fx-font-family: 'Segoe UI', sans-serif;
     -fx-background-color: #f7f8fb;
-    -fx-padding: 20 40; /* Adds margins on left & right */
+    -fx-padding: 20 40;
 }
 
 .title {
-    -fx-font-size: 22px;
-    -fx-font-weight: 700;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
     -fx-padding: 12 0 20 0;
-    -fx-text-fill: #1a3d7c; /* Darker blue for title */
+    -fx-text-fill: #1a3d7c;
+    -fx-alignment: CENTER;
+}
+
+.label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
 }
 
 .button {
     -fx-background-color: linear-gradient(to bottom, #3b82f6, #2563eb);
     -fx-text-fill: white;
-    -fx-font-weight: 600;
+    -fx-font-weight: bold;
     -fx-background-radius: 10;
-    -fx-padding: 8 18;   /* height ~34px */
+    -fx-padding: 8 18;
     -fx-cursor: hand;
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.15) , 4,0,0,2);
 }
@@ -29,7 +35,7 @@
     -fx-background-color: #1e40af;
 }
 
-.text-area {
+.text-area, .text-field, .combo-box {
     -fx-background-radius: 10;
     -fx-padding: 10;
     -fx-background-color: #ffffff;
@@ -41,7 +47,7 @@
 .progress-bar {
     -fx-background-color: #e5e7eb;
     -fx-background-radius: 10;
-    -fx-pref-height: 34; /* matches button height */
+    -fx-pref-height: 34;
 }
 
 .progress-bar > .bar {

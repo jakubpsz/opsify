@@ -2,7 +2,8 @@ package com.opsify.audio.converter.controller;
 
 import com.opsify.audio.converter.service.AudioConverterService;
 import com.opsify.audio.converter.service.ConversionListener;
-import com.opsify.constants.Constants;
+import com.opsify.utils.Constants;
+import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -28,11 +29,14 @@ public class AudioConverterController {
     protected TextField outputField;
     @FXML
     protected ComboBox<String> formatCombo;
-    @FXML private Button convertButton;
+    @FXML
+    protected Button convertButton;
     @FXML
     protected ProgressBar progressBar;
     @FXML
     protected TextArea logArea;
+    @FXML
+    protected Label titleLabel;
 
     private final ExecutorService exec = Executors.newSingleThreadExecutor();
     private final AudioConverterService converter;
@@ -51,6 +55,11 @@ public class AudioConverterController {
     public void initialize() {
         formatCombo.setItems(FXCollections.observableArrayList(Constants.SUPPORTED_FORMATS));
         progressBar.setProgress(0);
+
+        // Load and apply fonts using utility class
+        FontUtils.loadAndApplyNunitoFont(
+                titleLabel, convertButton, inputField, outputField, formatCombo, logArea
+        );
     }
 
     @FXML
@@ -118,5 +127,7 @@ public class AudioConverterController {
         Platform.runLater(() -> logArea.appendText(text));
     }
 
-    private void alert(String msg) { new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK).showAndWait(); }
+    private void alert(String msg) {
+        new Alert(Alert.AlertType.WARNING, msg, ButtonType.OK).showAndWait();
+    }
 }

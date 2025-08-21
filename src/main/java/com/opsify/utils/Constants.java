@@ -1,4 +1,4 @@
-package com.opsify.constants;
+package com.opsify.utils;
 
 import java.util.List;
 

@@ -3,7 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.audio.converter.controller.AudioConverterController" spacing="12" alignment="TOP_LEFT">
-    <Label text="Audio Converter" styleClass="title"/>
+    <HBox alignment="CENTER">
+        <Label fx:id="titleLabel" text="Audio Converter" styleClass="title"/>
+    </HBox>
     <GridPane hgap="8" vgap="8">
         <columnConstraints>
             <ColumnConstraints percentWidth="25"/>
