@@ -25,6 +25,10 @@
     -fx-padding: 8 18;
     -fx-cursor: hand;
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.15) , 4,0,0,2);
+    /* Add these properties to match progress bar height */
+    -fx-min-height: 34px;
+    -fx-pref-height: 34px;
+    -fx-max-height: 34px;
 }
 
 .button:hover {

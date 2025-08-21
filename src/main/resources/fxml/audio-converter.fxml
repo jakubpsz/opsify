@@ -30,9 +30,8 @@
 
     <HBox spacing="8">
         <Button fx:id="convertButton" text="Convert" onAction="#convert"/>
-        <ProgressBar fx:id="progressBar" prefWidth="300"/>
+        <ProgressBar fx:id="progressBar" prefWidth="400"/>
     </HBox>
 
-    <Label text="Log"/>
     <TextArea fx:id="logArea" prefRowCount="12"/>
 </VBox>
