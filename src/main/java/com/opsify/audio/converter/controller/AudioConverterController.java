@@ -119,6 +119,7 @@ public class AudioConverterController {
                 append(Constants.LOG_ERROR_GENERIC_PREFIX + e.getMessage() + "\n");
             } finally {
                 Platform.runLater(() -> convertButton.setDisable(false));
+                exec.shutdown();
             }
         });
     }
