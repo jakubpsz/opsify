@@ -7,9 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.opsify.util.PathAudioUtil.*;
+import static com.opsify.audio.converter.util.PathAudioUtil.*;
 
-class FfmpegAudioConverterTest {
+class AudioConverterServiceTest {
 
     @Test
     void mapToOutput_preservesStructure() {

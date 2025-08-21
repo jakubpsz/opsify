@@ -1,7 +1,8 @@
-package com.opsify.controller;
+package com.opsify.audio.converter.controller;
 
-import com.opsify.service.FfmpegAudioConverter;
-import com.opsify.util.Constants;
+import com.opsify.audio.converter.service.AudioConverterService;
+import com.opsify.audio.converter.service.ConversionListener;
+import com.opsify.constants.Constants;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ import java.util.concurrent.Executors;
  * and a target format. Triggers ffmpeg-based conversion and streams logs to the UI.
  */
 @Slf4j
-public class MainController {
+public class AudioConverterController {
 
     @FXML
     protected TextField inputField;
@@ -34,15 +35,15 @@ public class MainController {
     protected TextArea logArea;
 
     private final ExecutorService exec = Executors.newSingleThreadExecutor();
-    private final FfmpegAudioConverter converter;
+    private final AudioConverterService converter;
 
     // Default constructor for JavaFX
-    public MainController() {
-        this(new FfmpegAudioConverter());
+    public AudioConverterController() {
+        this(new AudioConverterService());
     }
 
     // Constructor injection (used in tests)
-    public MainController(FfmpegAudioConverter converter) {
+    public AudioConverterController(AudioConverterService converter) {
         this.converter = converter;
     }
 
@@ -88,7 +89,7 @@ public class MainController {
         exec.submit(() -> {
             try {
                 append(Constants.LOG_STARTING + "\n");
-                converter.convert(Path.of(in), Path.of(out), fmt, new com.opsify.service.ConversionListener() {
+                converter.convert(Path.of(in), Path.of(out), fmt, new ConversionListener() {
                     int total = 0;
                     @Override public void onStart(int t) { total = t; updateProgress(0, total); }
                     @Override public void onFileDone(Path input, Path output, int done, int t) {

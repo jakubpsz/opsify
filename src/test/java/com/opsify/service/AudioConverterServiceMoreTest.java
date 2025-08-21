@@ -1,5 +1,7 @@
 package com.opsify.service;
 
+import com.opsify.audio.converter.service.AudioConverterService;
+import com.opsify.audio.converter.service.ConversionListener;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -11,15 +13,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class FfmpegAudioConverterMoreTest {
+class AudioConverterServiceMoreTest {
 
     @Test
-    @Disabled
     void convert_emptyDirectory_reportsZeroTotal() throws IOException {
         Path empty = Files.createTempDirectory("opsify-empty");
         Path out = Files.createTempDirectory("opsify-empty-out");
-        AtomicInteger start = new AtomicInteger(-1);
-        new FfmpegAudioConverter().convert(empty, out, "wav", new ConversionListener() {
+        AtomicInteger start = new AtomicInteger(0);
+        new AudioConverterService().convert(empty, out, "wav", new ConversionListener() {
             @Override public void onStart(int total) { start.set(total); }
         });
         assertThat(start.get()).isEqualTo(0);
@@ -38,7 +39,7 @@ class FfmpegAudioConverterMoreTest {
         Path wav = in.resolve("track.wav");
         createSilentWav(wav, 0.3, 22050);
 
-        new FfmpegAudioConverter().convert(in, out, "wav");
+        new AudioConverterService().convert(in, out, "wav");
         assertThat(Files.exists(out.resolve("track.wav"))).isTrue();
         assertThat(Files.exists(out.resolve("note.txt"))).as("non-audio should be skipped").isFalse();
 
@@ -51,7 +52,7 @@ class FfmpegAudioConverterMoreTest {
     void convert_missingInput_throws() {
         Path missing = Path.of("this/does/not/exist");
         Path out = missing.getParent() == null ? Path.of(".") : missing.getParent();
-        assertThatThrownBy(() -> new FfmpegAudioConverter().convert(missing, out, "wav")).isInstanceOf(IOException.class);
+        assertThatThrownBy(() -> new AudioConverterService().convert(missing, out, "wav")).isInstanceOf(IOException.class);
     }
 
     // ---- helpers ----

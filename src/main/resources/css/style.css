@@ -1,5 +1,54 @@
-.root { -fx-font-family: 'Segoe UI', 'Inter', sans-serif; -fx-background-color: #f7f8fb; }
-.title { -fx-font-size: 22px; -fx-font-weight: 700; -fx-padding: 12 0 16 0; }
-.button { -fx-background-radius: 8; }
-.text-area { -fx-background-radius: 8; }
-.progress-bar > .bar { -fx-background-radius: 8; }
+.root {
+    -fx-font-family: 'Segoe UI', 'Inter', sans-serif;
+    -fx-background-color: #f7f8fb;
+    -fx-padding: 20 40; /* Adds margins on left & right */
+}
+
+.title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-padding: 12 0 20 0;
+    -fx-text-fill: #1a3d7c; /* Darker blue for title */
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #2563eb);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 10;
+    -fx-padding: 8 18;   /* height ~34px */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.15) , 4,0,0,2);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1d4ed8);
+}
+
+.button:pressed {
+    -fx-background-color: #1e40af;
+}
+
+.text-area {
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.progress-bar {
+    -fx-background-color: #e5e7eb;
+    -fx-background-radius: 10;
+    -fx-pref-height: 34; /* matches button height */
+}
+
+.progress-bar > .bar {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #2563eb);
+    -fx-background-radius: 10;
+}
+
+.progress-bar > .track {
+    -fx-background-radius: 10;
+}

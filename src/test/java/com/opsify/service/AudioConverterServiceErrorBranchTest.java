@@ -1,5 +1,7 @@
 package com.opsify.service;
 
+import com.opsify.audio.converter.service.AudioConverterService;
+import com.opsify.audio.converter.service.ConversionListener;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.*;
@@ -9,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FfmpegAudioConverterErrorBranchTest {
+class AudioConverterServiceErrorBranchTest {
 
     @Test
     void directoryConversion_invokesOnErrorForInvalidAudio() throws Exception {
@@ -25,7 +27,7 @@ class FfmpegAudioConverterErrorBranchTest {
         AtomicInteger errors = new AtomicInteger(0);
         AtomicInteger done = new AtomicInteger(0);
 
-        new FfmpegAudioConverter().convert(in, out, "wav", new ConversionListener() {
+        new AudioConverterService().convert(in, out, "wav", new ConversionListener() {
             @Override public void onFileDone(Path input, Path output, int d, int t) { done.incrementAndGet(); }
             @Override public void onError(Path input, Exception e, int d, int t) { errors.incrementAndGet(); }
         });

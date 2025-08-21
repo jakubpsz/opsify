@@ -4,9 +4,9 @@
  *
  * This class contains only instance methods; helpers are extracted to PathAudioUtil for reuse and testability.
  */
-package com.opsify.service;
+package com.opsify.audio.converter.service;
 
-import com.opsify.util.PathAudioUtil;
+import com.opsify.audio.converter.util.PathAudioUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static com.opsify.util.PathAudioUtil.*;
+import static com.opsify.audio.converter.util.PathAudioUtil.*;
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 @Slf4j
-public class FfmpegAudioConverter {
+public class AudioConverterService {
 
     /** Convert an input path into the output directory. If input is a file converts one, if a directory converts recursively. */
     public void convert(@NonNull Path input, @NonNull Path outputDir, @NonNull String targetExt) throws IOException {

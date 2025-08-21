@@ -1,5 +1,7 @@
 package com.opsify.service;
 
+import com.opsify.audio.converter.service.AudioConverterService;
+import com.opsify.audio.converter.service.ConversionListener;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FfmpegAudioConverterProgressTest {
+class AudioConverterServiceProgressTest {
 
     @Test
     @Disabled
@@ -22,7 +24,7 @@ class FfmpegAudioConverterProgressTest {
         AtomicInteger started = new AtomicInteger();
         AtomicInteger done = new AtomicInteger();
 
-        new FfmpegAudioConverter().convert(input, outDir, "wav", new ConversionListener() {
+        new AudioConverterService().convert(input, outDir, "wav", new ConversionListener() {
             @Override public void onStart(int total) { started.set(total); }
             @Override public void onFileDone(Path in, Path out, int d, int t) { done.set(d); }
         });

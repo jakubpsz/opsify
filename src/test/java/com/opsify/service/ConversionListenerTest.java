@@ -1,5 +1,6 @@
 package com.opsify.service;
 
+import com.opsify.audio.converter.service.ConversionListener;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;

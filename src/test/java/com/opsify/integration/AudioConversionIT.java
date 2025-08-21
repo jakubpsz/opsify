@@ -1,6 +1,6 @@
 package com.opsify.integration;
 
-import com.opsify.service.FfmpegAudioConverter;
+import com.opsify.audio.converter.service.AudioConverterService;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.*;
@@ -28,7 +28,7 @@ public class AudioConversionIT {
         createSilentWav(subWav, 0.5, 22050);
 
         // Convert entire directory to WAV (PCM), which should always be supported
-        new FfmpegAudioConverter().convert(inputRoot, outputRoot, "wav");
+        new AudioConverterService().convert(inputRoot, outputRoot, "wav");
 
         // Assertions: outputs exist and structure retained
         Path expectedRootOut = outputRoot.resolve("track1.wav");
