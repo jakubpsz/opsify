@@ -9,7 +9,7 @@
     <name>Opsify</name>
     <packaging>jar</packaging>
 
-    <!-- Versions -->
+    <!-- ===================== Versions ===================== -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>

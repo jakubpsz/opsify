@@ -20,11 +20,16 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and run tests (headless)
-        run: |
-          # Use headless mode for JavaFX
-          export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
-          mvn -B clean test --file pom.xml
+      - name: Build and run tests (headless JavaFX)
+        env:
+          _JAVA_OPTIONS: >
+            -Djava.awt.headless=true
+            -Dtestfx.robot=glass
+            -Dtestfx.headless=true
+            -Dglass.platform=Monocle
+            -Dprism.order=sw
+            -Dprism.text=t2k
+        run: mvn -B clean test --file pom.xml
 
       - name: Generate Jacoco coverage report
         run: mvn jacoco:report --file pom.xml
