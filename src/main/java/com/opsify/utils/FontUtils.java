@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FontUtils {
 
+    public static final String FONTS_NUNITO_REGULAR_TTF = "/fonts/Nunito-Regular.ttf";
+    public static final String FONTS_NUNITO_BOLD_TTF = "/fonts/Nunito-Bold.ttf";
+
     public static void loadAndApplyNunitoFont(Label titleLabel, Button convertButton,
                                               TextField inputField, TextField outputField,
                                               ComboBox<String> formatCombo, TextArea logArea) {
@@ -23,8 +26,8 @@ public class FontUtils {
         }
 
         try {
-            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Regular.ttf"), 12);
-            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Bold.ttf"), 12);
+            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_REGULAR_TTF), 12);
+            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_BOLD_TTF), 12);
 
             if (nunitoRegular != null && nunitoBold != null) {
                 log.info("Nunito font loaded successfully");

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -272,5 +274,28 @@ class FontUtilsTest extends ApplicationTest {
                 FontUtils.loadAndApplyNunitoFont(titleLabel, null, inputField, null, formatCombo, logArea)
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("UI components cannot be null when applying fonts");
+    }
+
+    @Test
+    void testUseFallbackFonts_directInvocation() throws Exception {
+        // Use reflection to test useFallbackFonts directly
+        Method useFallbackFonts = FontUtils.class.getDeclaredMethod("useFallbackFonts",
+                Label.class, Button.class, TextField.class, TextField.class, ComboBox.class, TextArea.class);
+        useFallbackFonts.setAccessible(true);
+
+        useFallbackFonts.invoke(null, titleLabel, convertButton, inputField, outputField, formatCombo, logArea);
+
+        // Verify all fallback styles are applied correctly
+        assertThat(titleLabel.getStyle())
+                .contains("Segoe UI")
+                .contains("bold")
+                .contains("24px");
+        assertThat(convertButton.getStyle())
+                .contains("Segoe UI")
+                .contains("bold");
+        assertThat(inputField.getStyle()).contains("Segoe UI");
+        assertThat(outputField.getStyle()).contains("Segoe UI");
+        assertThat(formatCombo.getStyle()).contains("Segoe UI");
+        assertThat(logArea.getStyle()).contains("Segoe UI");
     }
 }

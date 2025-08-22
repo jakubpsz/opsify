@@ -156,16 +156,26 @@
                         <configuration>
                             <rules>
                                 <rule>
+                                    <!-- Element can be CLASS or PACKAGE -->
                                     <element>CLASS</element>
                                     <includes>
-                                        <include>com.opsify.service.*</include>
-                                        <include>com.opsify.util.*</include>
-                                        <include>com.opsify.model.*</include>
+                                        <!-- Only these specific classes will be checked -->
+                                        <include>com.opsify.audio.converter.util.PathAudioUtil*</include>
+<!--                                        <include>com.opsify.utils.FontUtils*</include>-->
                                     </includes>
+                                    <!-- Optionally enforce a coverage threshold -->
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum> <!-- 80% minimum line coverage -->
+                                        </limit>
+                                    </limits>
                                 </rule>
                             </rules>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
 
