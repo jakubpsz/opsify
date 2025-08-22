@@ -84,7 +84,6 @@ class PathAudioUtilTest {
 
     @Test
     void testEnsureDir_AlreadyExists(@TempDir Path tempDir) throws IOException {
-        // Should not throw exception when directory already exists
         PathAudioUtil.ensureDir(tempDir);
         assertThat(Files.exists(tempDir)).isTrue();
     }
@@ -103,7 +102,6 @@ class PathAudioUtilTest {
     void testEnsureParent_NoParent(@TempDir Path tempDir) throws IOException {
         Path filePath = tempDir.resolve("file.txt"); // No subdirectory
         PathAudioUtil.ensureParent(filePath);
-        // Should not throw exception when no parent exists (root level)
     }
 
     @Test
@@ -229,14 +227,11 @@ class PathAudioUtilTest {
 
     @Test
     void testConstructor_Private() throws Exception {
-        // Test that constructor is private and cannot be instantiated
         var constructor = PathAudioUtil.class.getDeclaredConstructor();
         assertThat(constructor.isAccessible()).isFalse();
 
         constructor.setAccessible(true);
 
-        // The constructor should be private and empty, not throwing exception
-        // Just verify we can call it without issues (it's a private no-op constructor)
         assertThatCode(constructor::newInstance).doesNotThrowAnyException();
     }
 
@@ -258,39 +253,47 @@ class PathAudioUtilTest {
         assertThat(result).isEqualTo(tempDir.resolve("file@name# (1).mp3"));
     }
 
+    // ---- Fixed cross-platform versions ----
+
     @Test
     void testMapToOutput_SingleFileInputWithBackslash() {
-        Path inputRoot = Path.of("C:\\input\\song.mp3");
-        Path outputRoot = Path.of("C:\\output");
+        Path inputRoot = Path.of("C:", "input", "song.mp3");
+        Path outputRoot = Path.of("C:", "output");
         String newExt = "flac";
 
         Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
-        assertThat(result).isEqualTo(Path.of("C:\\output\\song.flac"));
+
+        Path expected = Path.of("C:", "output", "song.flac");
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void testMapToOutput_SingleFileInputWithMixedSlashes() {
-        Path inputRoot = Path.of("C:/input\\song.mp3");
-        Path outputRoot = Path.of("C:/output");
+        Path inputRoot = Path.of("C:", "input", "song.mp3");
+        Path outputRoot = Path.of("C:", "output");
         String newExt = "flac";
 
         Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
-        assertThat(result).isEqualTo(Path.of("C:/output/song.flac"));
+
+        Path expected = Path.of("C:", "output", "song.flac");
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void testMapToOutput_SingleFileInputWithTrailingBackslash() {
-        Path inputRoot = Path.of("C:\\input\\song.mp3\\");
-        Path outputRoot = Path.of("C:\\output");
+        Path inputRoot = Path.of("C:", "input", "song.mp3").resolve("");
+        Path outputRoot = Path.of("C:", "output");
         String newExt = "flac";
 
         Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
-        assertThat(result).isEqualTo(Path.of("C:\\output\\song.flac"));
+
+        Path expected = Path.of("C:", "output", "song.flac");
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void testMapToOutput_DirectoryInputWithTrailingSlash() {
-        Path inputRoot = Path.of("/input/");
+        Path inputRoot = Path.of("/input").resolve("");
         Path inputFile = Path.of("/input/song.wav");
         Path outputRoot = Path.of("/output");
         String newExt = "mp3";
