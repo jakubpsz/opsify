@@ -2,7 +2,7 @@ package com.opsify.audio.converter.controller;
 
 import com.opsify.audio.converter.service.AudioConverterService;
 import com.opsify.audio.converter.service.ConversionListener;
-import com.opsify.utils.Constants;
+import com.opsify.constants.Constants;
 import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
