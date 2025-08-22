@@ -239,4 +239,95 @@ class PathAudioUtilTest {
         // Just verify we can call it without issues (it's a private no-op constructor)
         assertThatCode(constructor::newInstance).doesNotThrowAnyException();
     }
+
+    @Test
+    void testUnique_FileWithOnlySpacesInName(@TempDir Path tempDir) throws IOException {
+        Path existingFile = tempDir.resolve("   .txt");
+        Files.createFile(existingFile);
+
+        Path result = PathAudioUtil.unique(existingFile);
+        assertThat(result).isEqualTo(tempDir.resolve("    (1).txt"));
+    }
+
+    @Test
+    void testUnique_FileWithSpecialCharacters(@TempDir Path tempDir) throws IOException {
+        Path existingFile = tempDir.resolve("file@name#.mp3");
+        Files.createFile(existingFile);
+
+        Path result = PathAudioUtil.unique(existingFile);
+        assertThat(result).isEqualTo(tempDir.resolve("file@name# (1).mp3"));
+    }
+
+    @Test
+    void testMapToOutput_SingleFileInputWithBackslash() {
+        Path inputRoot = Path.of("C:\\input\\song.mp3");
+        Path outputRoot = Path.of("C:\\output");
+        String newExt = "flac";
+
+        Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
+        assertThat(result).isEqualTo(Path.of("C:\\output\\song.flac"));
+    }
+
+    @Test
+    void testMapToOutput_SingleFileInputWithMixedSlashes() {
+        Path inputRoot = Path.of("C:/input\\song.mp3");
+        Path outputRoot = Path.of("C:/output");
+        String newExt = "flac";
+
+        Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
+        assertThat(result).isEqualTo(Path.of("C:/output/song.flac"));
+    }
+
+    @Test
+    void testMapToOutput_SingleFileInputWithTrailingBackslash() {
+        Path inputRoot = Path.of("C:\\input\\song.mp3\\");
+        Path outputRoot = Path.of("C:\\output");
+        String newExt = "flac";
+
+        Path result = PathAudioUtil.mapToOutput(inputRoot, inputRoot, outputRoot, newExt);
+        assertThat(result).isEqualTo(Path.of("C:\\output\\song.flac"));
+    }
+
+    @Test
+    void testMapToOutput_DirectoryInputWithTrailingSlash() {
+        Path inputRoot = Path.of("/input/");
+        Path inputFile = Path.of("/input/song.wav");
+        Path outputRoot = Path.of("/output");
+        String newExt = "mp3";
+
+        Path result = PathAudioUtil.mapToOutput(inputRoot, inputFile, outputRoot, newExt);
+        assertThat(result).isEqualTo(Path.of("/output/song.mp3"));
+    }
+
+    @Test
+    void testMapToOutput_RelativePaths() {
+        Path inputRoot = Path.of("input");
+        Path inputFile = Path.of("input/song.wav");
+        Path outputRoot = Path.of("output");
+        String newExt = "mp3";
+
+        Path result = PathAudioUtil.mapToOutput(inputRoot, inputFile, outputRoot, newExt);
+        assertThat(result).isEqualTo(Path.of("output/song.mp3"));
+    }
+
+    @Test
+    void testUnique_FileWithExistingHighNumber(@TempDir Path tempDir) throws IOException {
+        Path baseFile = tempDir.resolve("test.txt");
+        Files.createFile(baseFile);
+        Files.createFile(tempDir.resolve("test (100).txt"));
+
+        Path result = PathAudioUtil.unique(baseFile);
+        assertThat(result).isEqualTo(tempDir.resolve("test (1).txt"));
+    }
+
+    @Test
+    void testUnique_FileWithGapsInNumbering(@TempDir Path tempDir) throws IOException {
+        Path baseFile = tempDir.resolve("test.txt");
+        Files.createFile(baseFile);
+        Files.createFile(tempDir.resolve("test (1).txt"));
+        Files.createFile(tempDir.resolve("test (3).txt"));
+
+        Path result = PathAudioUtil.unique(baseFile);
+        assertThat(result).isEqualTo(tempDir.resolve("test (2).txt"));
+    }
 }

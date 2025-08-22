@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.audio.converter.controller.AudioConverterController" spacing="12" alignment="TOP_LEFT">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.audio.converter.controller.AudioConverterController" spacing="12">
     <HBox alignment="CENTER">
         <Label fx:id="titleLabel" text="Audio Converter" styleClass="title"/>
     </HBox>
