@@ -37,6 +37,18 @@ public final class PathAudioUtil {
 
     /** Map inputFile under inputRoot into outputRoot preserving structure and changing ext. */
     public static Path mapToOutput(Path inputRoot, Path inputFile, Path outputRoot, String newExt) {
+        // Handle single file input case - check if inputRoot represents a file (has extension or looks like a file)
+        boolean isSingleFileInput = isLikelyFileReference(inputRoot) &&
+                inputRoot.equals(inputFile);
+
+        if (isSingleFileInput) {
+            String name = inputRoot.getFileName().toString();
+            int dot = name.lastIndexOf('.');
+            String base = dot > 0 ? name.substring(0, dot) : name;
+            return outputRoot.resolve(base + "." + newExt);
+        }
+
+        // Original directory handling code
         Path rel = inputRoot.toAbsolutePath().relativize(inputFile.toAbsolutePath());
         String name = rel.getFileName().toString();
         int dot = name.lastIndexOf('.');
@@ -44,6 +56,13 @@ public final class PathAudioUtil {
         Path outRel = rel.getParent() == null ? Path.of(base + "." + newExt)
                 : rel.getParent().resolve(base + "." + newExt);
         return outputRoot.resolve(outRel);
+    }
+
+    private static boolean isLikelyFileReference(Path path) {
+        // Heuristic: if the path has a file-like structure (not ending with slash)
+        // and inputFile equals inputRoot, treat as single file
+        String pathStr = path.toString();
+        return !pathStr.endsWith("/") && !pathStr.endsWith("\\");
     }
 
     /** If desired exists, returns a non-conflicting variant "name (n).ext". */
