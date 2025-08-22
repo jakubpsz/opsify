@@ -1,9 +1,3 @@
-/**
- * Audio conversion service that uses FFmpeg (via JavaCV) to convert audio files from any supported format
- * to a requested target format while preserving original file names and directory structure.
- *
- * This class contains only instance methods; helpers are extracted to PathAudioUtil for reuse and testability.
- */
 package com.opsify.audio.converter.service;
 
 import com.opsify.audio.converter.util.PathAudioUtil;
