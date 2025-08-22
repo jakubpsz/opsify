@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import com.opsify.utils.Constants;
+import com.opsify.constants.Constants;
 
 import java.util.Objects;
 

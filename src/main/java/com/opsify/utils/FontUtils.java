@@ -1,6 +1,10 @@
 package com.opsify.utils;
 
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,21 +14,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FontUtils {
 
-    /**
-     * Loads Nunito font and applies it to UI components
-     */
+    public static final String FONTS_NUNITO_REGULAR_TTF = "/fonts/Nunito-Regular.ttf";
+    public static final String FONTS_NUNITO_BOLD_TTF = "/fonts/Nunito-Bold.ttf";
+
     public static void loadAndApplyNunitoFont(Label titleLabel, Button convertButton,
                                               TextField inputField, TextField outputField,
                                               ComboBox<String> formatCombo, TextArea logArea) {
+        if (titleLabel == null || convertButton == null || inputField == null
+                || outputField == null || formatCombo == null || logArea == null) {
+            throw new IllegalArgumentException("UI components cannot be null when applying fonts");
+        }
+
         try {
-            // Try to load Nunito font from resources
-            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Regular.ttf"), 12);
-            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Bold.ttf"), 12);
+            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_REGULAR_TTF), 12);
+            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_BOLD_TTF), 12);
 
             if (nunitoRegular != null && nunitoBold != null) {
                 log.info("Nunito font loaded successfully");
-
-                // Apply fonts to specific elements
                 applyNunitoStyles(titleLabel, convertButton, inputField, outputField, formatCombo, logArea);
             } else {
                 log.warn("Nunito font could not be loaded, using system fallback fonts");
@@ -35,6 +41,7 @@ public class FontUtils {
             useFallbackFonts(titleLabel, convertButton, inputField, outputField, formatCombo, logArea);
         }
     }
+
 
     /**
      * Applies Nunito font styles to UI components
