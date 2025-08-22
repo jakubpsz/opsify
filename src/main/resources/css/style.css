@@ -62,3 +62,37 @@
 .progress-bar > .track {
     -fx-background-radius: 10;
 }
+
+/* Add these styles to your existing CSS */
+
+.tile-button {
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #2563eb);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4,0,0,2);
+    -fx-font-size: 16px;
+    -fx-min-width: 200px;
+    -fx-min-height: 120px;
+}
+
+.tile-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #1d4ed8);
+}
+
+.tile-button:pressed {
+    -fx-background-color: #1e40af;
+}
+
+.home-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+}
+
+.home-button:hover {
+    -fx-background-color: #e5e7eb;
+}

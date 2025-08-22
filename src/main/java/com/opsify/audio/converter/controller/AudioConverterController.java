@@ -7,6 +7,8 @@ import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -18,9 +20,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,6 +53,21 @@ public class AudioConverterController {
 
     public AudioConverterController () {
         this.converter = new AudioConverterService();
+    }
+
+    // Add this method to the controller
+    @FXML
+    public void goToHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_HOME_FXML));
+            Stage stage = (Stage) convertButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 900, 600);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.CSS_MAIN)).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("Opsify Tools");
+        } catch (IOException e) {
+            log.error("Error navigating to home", e);
+        }
     }
 
     @FXML

@@ -42,6 +42,43 @@ public class FontUtils {
         }
     }
 
+    // Add this method to handle buttons in the home page
+    public static void loadAndApplyNunitoFont(Label titleLabel, Button... buttons) {
+        if (titleLabel == null || buttons == null) {
+            throw new IllegalArgumentException("UI components cannot be null when applying fonts");
+        }
+
+        try {
+            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_REGULAR_TTF), 12);
+            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_BOLD_TTF), 12);
+
+            if (nunitoRegular != null && nunitoBold != null) {
+                log.info("Nunito font loaded successfully");
+                applyNunitoStyles(titleLabel, buttons);
+            } else {
+                log.warn("Nunito font could not be loaded, using system fallback fonts");
+                useFallbackFonts(titleLabel, buttons);
+            }
+        } catch (Exception e) {
+            log.error("Error loading Nunito font: {}", e.getMessage());
+            useFallbackFonts(titleLabel, buttons);
+        }
+    }
+
+    private static void applyNunitoStyles(Label titleLabel, Button... buttons) {
+        titleLabel.setStyle("-fx-font-family: 'Nunito'; -fx-font-weight: bold; -fx-font-size: 24px;");
+        for (Button button : buttons) {
+            button.setStyle("-fx-font-family: 'Nunito'; -fx-font-weight: bold;");
+        }
+    }
+
+    private static void useFallbackFonts(Label titleLabel, Button... buttons) {
+        titleLabel.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-font-weight: bold; -fx-font-size: 24px;");
+        for (Button button : buttons) {
+            button.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-font-weight: bold;");
+        }
+    }
+
 
     /**
      * Applies Nunito font styles to UI components

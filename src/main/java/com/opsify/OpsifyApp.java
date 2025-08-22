@@ -17,7 +17,7 @@ public class OpsifyApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_MAIN));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_HOME_FXML));
         Scene scene = new Scene(loader.load(), 900, 600);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.CSS_MAIN)).toExternalForm());
         stage.setTitle(Constants.APP_TITLE);
