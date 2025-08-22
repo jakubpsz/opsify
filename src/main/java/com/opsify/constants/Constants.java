@@ -13,7 +13,8 @@ public final class Constants {
     public static final String LOGO = "/logo/simpler_logo.png";
 
     // Resources
-    public static final String FXML_MAIN = "/fxml/audio-converter.fxml";
+    public static final String FXML_AUDIO_CONVERTER_FXML = "/fxml/audio-converter.fxml";
+    public static final String FXML_HOME_FXML = "/fxml/home.fxml";
     public static final String CSS_MAIN = "/css/style.css";
 
     // UI messages

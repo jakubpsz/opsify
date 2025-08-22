@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.home.HomeController" spacing="20" alignment="CENTER">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <Label fx:id="titleLabel" text="Opsify Tools" styleClass="title"/>
+
+    <GridPane hgap="20" vgap="20" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="200"/>
+            <ColumnConstraints prefWidth="200"/>
+        </columnConstraints>
+
+        <Button fx:id="audioConverterBtn" text="Audio Converter" onAction="#navigateToAudioConverter"
+                GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="tile-button"/>
+
+        <Button fx:id="imageRenamerBtn" text="Image Renamer" onAction="#navigateToPlaceholder"
+                GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="tile-button"/>
+
+        <Button fx:id="pdfJoinerBtn" text="PDF Joiner" onAction="#navigateToPlaceholder"
+                GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="tile-button"/>
+    </GridPane>
+</VBox>
