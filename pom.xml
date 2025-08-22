@@ -2,23 +2,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.opsify</groupId>
     <artifactId>opsify</artifactId>
     <version>1.0.0</version>
     <name>Opsify</name>
     <packaging>jar</packaging>
 
+    <!-- Versions -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <javafx.version>21</javafx.version>
+        <lombok.version>1.18.32</lombok.version>
+        <logback.version>1.5.6</logback.version>
+        <javacv.version>1.5.9</javacv.version>
         <junit.version>5.10.2</junit.version>
+        <assertj.version>3.25.3</assertj.version>
+        <mockito.version>5.12.0</mockito.version>
+        <testfx.version>4.0.16-alpha</testfx.version>
+        <testfx.monocle.version>21.0.2</testfx.monocle.version>
         <jacoco.version>0.8.11</jacoco.version>
     </properties>
 
     <dependencies>
-        <!-- JavaFX UI -->
+
+        <!-- ===================== JavaFX ===================== -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -29,38 +39,35 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-        <!-- Add JavaFX Graphics for headless testing -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>${javafx.version}</version>
-            <classifier>linux</classifier>
-            <scope>test</scope>
         </dependency>
 
-        <!-- Lombok (getters/setters/logging). Install Lombok plugin in IDE. -->
+        <!-- ===================== Lombok ===================== -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Logging backend -->
+        <!-- ===================== Logging ===================== -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.6</version>
+            <version>${logback.version}</version>
         </dependency>
 
-        <!-- FFmpeg/JavaCV platform (bundles FFmpeg native libraries and Java wrappers) -->
+        <!-- ===================== Media / FFmpeg ===================== -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv-platform</artifactId>
-            <version>1.5.9</version>
+            <version>${javacv.version}</version>
         </dependency>
 
-        <!-- Testing -->
+        <!-- ===================== Testing ===================== -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -70,56 +77,50 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.25.3</version>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.12.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>5.12.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
-            <version>4.0.16-alpha</version>
+            <version>${testfx.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>openjfx-monocle</artifactId>
-            <version>21.0.2</version> <!-- 17.0.10 For OpenJFX 17, 11.0.2 For OpenJFX 11, jdk-8.0.372 for Java 8 -->
+            <version>${testfx.monocle.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <!-- ===================== Compiler Plugin ===================== -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
                 <configuration>
-                    <useModulePath>false</useModulePath>
-                    <argLine>
-                        --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-                        --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                        -Dtestfx.robot=glass
-                        -Dtestfx.headless=true
-                        -Dheadless=true
-                        -Dprism.order=sw
-                        -Dprism.text=t2k
-                        -Djava.awt.headless=true
-                    </argLine>
+                    <release>21</release>
                 </configuration>
             </plugin>
 
+            <!-- ===================== JavaFX Plugin ===================== -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -129,6 +130,7 @@
                 </configuration>
             </plugin>
 
+            <!-- ===================== Jacoco Plugin ===================== -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -166,6 +168,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>
