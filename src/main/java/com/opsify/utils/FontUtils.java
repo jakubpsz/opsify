@@ -14,21 +14,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FontUtils {
 
-    /**
-     * Loads Nunito font and applies it to UI components
-     */
     public static void loadAndApplyNunitoFont(Label titleLabel, Button convertButton,
                                               TextField inputField, TextField outputField,
                                               ComboBox<String> formatCombo, TextArea logArea) {
+        if (titleLabel == null || convertButton == null || inputField == null
+                || outputField == null || formatCombo == null || logArea == null) {
+            throw new IllegalArgumentException("UI components cannot be null when applying fonts");
+        }
+
         try {
-            // Try to load Nunito font from resources
             Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Regular.ttf"), 12);
             Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream("/fonts/Nunito-Bold.ttf"), 12);
 
             if (nunitoRegular != null && nunitoBold != null) {
                 log.info("Nunito font loaded successfully");
-
-                // Apply fonts to specific elements
                 applyNunitoStyles(titleLabel, convertButton, inputField, outputField, formatCombo, logArea);
             } else {
                 log.warn("Nunito font could not be loaded, using system fallback fonts");
@@ -39,6 +38,7 @@ public class FontUtils {
             useFallbackFonts(titleLabel, convertButton, inputField, outputField, formatCombo, logArea);
         }
     }
+
 
     /**
      * Applies Nunito font styles to UI components
