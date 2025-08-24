@@ -53,4 +53,18 @@ public class HomeController {
         // Placeholder for future implementations
         System.out.println("This feature is coming soon!");
     }
+
+    @FXML
+    public void navigateToImageRenamer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_IMAGE_RENAMER_FXML));
+            Stage stage = (Stage) imageRenamerBtn.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 900, 600);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.CSS_MAIN)).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("Media File Renamer - Opsify");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
