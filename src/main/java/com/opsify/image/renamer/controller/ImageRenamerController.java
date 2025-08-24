@@ -79,6 +79,8 @@ public class ImageRenamerController {
     @FXML
     public void initialize() {
         schemaCombo.setItems(FXCollections.observableArrayList(Constants.IMAGE_SCHEMAS));
+        // Set default format to yyyy_MM_dd_HH-mm-ss
+        schemaCombo.getSelectionModel().select(0);
         progressBar.setProgress(INITIAL_PROGRESS);
         FontUtils.loadAndApplyNunitoFont(
                 titleLabel, renameButton, inputField, outputField, schemaCombo, logArea

@@ -31,6 +31,7 @@ public final class Constants {
 
     // Image Renamer constants
     public static final String[] IMAGE_SCHEMAS = {
+            "yyyy_MM_dd_HH-mm-ss",  // Default format moved to first position
             "yyyy-MM-dd_HH-mm-ss",
             "yyyyMMdd_HHmmss",
             "dd-MM-yyyy_HH-mm-ss",

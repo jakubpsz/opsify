@@ -18,7 +18,7 @@
         <Button fx:id="audioConverterBtn" text="Audio Converter" onAction="#navigateToAudioConverter"
                 GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="tile-button"/>
 
-        <Button fx:id="imageRenamerBtn" text="Image Renamer" onAction="#navigateToImageRenamer"
+        <Button fx:id="imageRenamerBtn" text="Media File Renamer" onAction="#navigateToImageRenamer"
                 GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="tile-button"/>
 
         <Button fx:id="pdfJoinerBtn" text="PDF Joiner" onAction="#navigateToPlaceholder"
