@@ -1,7 +1,7 @@
 # Opsify
 
 <div align="center">
-    <img src="docs/logo.png" alt="Audio Converter Logo" width="150" />
+    <img src="docs/new_logo.png" alt="Audio Converter Logo" width="150" />
 </div>
 JavaFX desktop application for processing different media files and documents
 
@@ -34,7 +34,7 @@ Notes
 - JaCoCo coverage rules are configured for util/service packages.
 
 
-jpackage --type exe --input target --main-jar opsify-1.0.0.jar --main-class com.opsify.app.Main --name Opsify --app-version 1.0 --win-dir-chooser --win-menu --win-shortcut --icon src/main/resources/logo/opsify.ico
+jpackage --type exe --input target --main-jar opsify-1.0.0.jar --main-class com.opsify.app.Main --name Opsify --app-version 1.0 --win-dir-chooser --win-menu --win-shortcut --icon src/main/resources/icons/new_logo.ico
 
 
-jpackage --type dmg --input target --main-jar opsify-1.0.0.jar --main-class class com.opsify.app.Main --name Opsify --app-version 1.0 --icon src/main/resources/logo/opsify.ico
+jpackage --type dmg --input target --main-jar opsify-1.0.0.jar --main-class class com.opsify.app.Main --name Opsify --app-version 1.0 --icon src/main/resources/icons/new_logo.icns
