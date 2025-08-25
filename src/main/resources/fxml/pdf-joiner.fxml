@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.features.pdf.joiner.view.PdfJoinerController"
+      spacing="12">
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button onAction="#goToHome" styleClass="home-button">
+            <graphic>
+                <ImageView fitWidth="20" fitHeight="20">
+                    <Image url="@/icons/home.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+    <HBox alignment="CENTER" spacing="10">
+        <Label fx:id="titleLabel" text="PDF Joiner" styleClass="title" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+    </HBox>
+
+    <GridPane hgap="8" vgap="8">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="15"/>
+            <ColumnConstraints percentWidth="85"/>
+        </columnConstraints>
+
+        <Label text="PDF Files" GridPane.rowIndex="0"/>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="6">
+            <ListView fx:id="filesListView" prefHeight="200"/>
+            <HBox spacing="6">
+                <Button text="Add PDFs" onAction="#addPdfFiles"/>
+                <Button text="Remove Selected" onAction="#removeSelectedFile"/>
+                <Button text="Move Up" onAction="#moveFileUp"/>
+                <Button text="Move Down" onAction="#moveFileDown"/>
+            </HBox>
+        </VBox>
+
+        <Label text="Output Directory" GridPane.rowIndex="1"/>
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="6">
+            <TextField fx:id="outputDirField" promptText="Output directory..." prefWidth="400"/>
+            <Button text="Choose" onAction="#chooseOutputDir"/>
+        </HBox>
+
+        <Label text="Output File Name" GridPane.rowIndex="2"/>
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="6">
+            <TextField fx:id="outputFileNameField" promptText="Output file name..." prefWidth="400"/>
+        </HBox>
+    </GridPane>
+
+    <HBox spacing="8">
+        <Button fx:id="joinButton" text="Join PDFs" onAction="#joinPdfs"/>
+        <ProgressBar fx:id="progressBar" prefWidth="500"/>
+    </HBox>
+
+    <TextArea fx:id="logArea" prefRowCount="8"/>
+</VBox>
