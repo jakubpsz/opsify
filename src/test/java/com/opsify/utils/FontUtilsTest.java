@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;

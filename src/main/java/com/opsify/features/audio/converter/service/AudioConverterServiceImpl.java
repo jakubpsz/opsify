@@ -1,6 +1,6 @@
-package com.opsify.audio.converter.service;
+package com.opsify.features.audio.converter.service;
 
-import com.opsify.audio.converter.util.PathAudioUtil;
+import com.opsify.features.audio.converter.utils.PathAudioUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -16,12 +16,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static com.opsify.audio.converter.util.PathAudioUtil.*;
+import static com.opsify.features.audio.converter.utils.PathAudioUtil.*;
 import static org.bytedeco.ffmpeg.global.avcodec.*;
 
 @Slf4j
-public class AudioConverterService {
+public class AudioConverterServiceImpl implements AudioConverterService {
 
+    @Override
     public void convert(@NonNull Path input,
                         @NonNull Path outputDir,
                         @NonNull String targetExt,

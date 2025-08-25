@@ -1,5 +1,6 @@
-package com.opsify.audio.converter.util;
+package com.opsify.features.audio.converter.util;
 
+import com.opsify.features.audio.converter.utils.PathAudioUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

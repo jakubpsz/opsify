@@ -20,16 +20,6 @@ Tech stack
 - JUnit 5 + AssertJ + Mockito for tests
 - Maven
 
-Project structure
-- src/main/java/com/opsify/app/AudioConverterApp.java: JavaFX entry point
-- src/main/java/com/opsify/controller/MainController.java: UI controller
-- src/main/java/com/opsify/service/FfmpegAudioConverter.java: conversion service
-- src/main/java/com/opsify/service/ConversionListener.java: progress listener interface
-- src/main/java/com/opsify/util/PathAudioUtil.java: path utilities
-- src/main/java/com/opsify/util/Constants.java: common constants
-- src/main/resources/fxml/main.fxml: UI
-- src/main/resources/css/style.css: styling
-
 Build
 - mvn -q -DskipTests package
 
@@ -44,7 +34,7 @@ Notes
 - JaCoCo coverage rules are configured for util/service packages.
 
 
-jpackage --type exe --input target --main-jar opsify-1.0.0.jar --main-class com.opsify.Main --name Opsify --app-version 1.0 --win-dir-chooser --win-menu --win-shortcut --icon src/main/resources/logo/opsify.ico
+jpackage --type exe --input target --main-jar opsify-1.0.0.jar --main-class com.opsify.app.Main --name Opsify --app-version 1.0 --win-dir-chooser --win-menu --win-shortcut --icon src/main/resources/logo/opsify.ico
 
 
-jpackage --type dmg --input target --main-jar opsify-1.0.0.jar --main-class class com.opsify.Main --name Opsify --app-version 1.0 --icon src/main/resources/logo/opsify.ico
+jpackage --type dmg --input target --main-jar opsify-1.0.0.jar --main-class class com.opsify.app.Main --name Opsify --app-version 1.0 --icon src/main/resources/logo/opsify.ico

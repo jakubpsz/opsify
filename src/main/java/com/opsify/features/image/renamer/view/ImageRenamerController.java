@@ -1,8 +1,9 @@
-package com.opsify.audio.converter.controller;
+package com.opsify.features.image.renamer.view;
 
-import com.opsify.audio.converter.service.AudioConverterService;
-import com.opsify.audio.converter.service.ConversionListener;
-import com.opsify.constants.Constants;
+import com.opsify.utils.Constants;
+import com.opsify.features.image.renamer.service.ImageRenamerService;
+import com.opsify.features.image.renamer.service.ImageRenamerServiceImpl;
+import com.opsify.features.image.renamer.service.RenamerListener;
 import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -24,23 +26,28 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Slf4j
-public class AudioConverterController {
+public class ImageRenamerController {
 
-    private static final int INITIAL_PROGRESS_OF_CONVERSION = 0;
+    private static final int INITIAL_PROGRESS = 0;
     @FXML
     protected TextField inputField;
     @FXML
     protected TextField outputField;
     @FXML
-    protected ComboBox<String> formatCombo;
+    protected ComboBox<String> schemaCombo;
     @FXML
-    protected Button convertButton;
+    protected CheckBox groupByYear;
+    @FXML
+    protected CheckBox groupByMonth;
+    @FXML
+    protected CheckBox groupByDay;
+    @FXML
+    protected Button renameButton;
     @FXML
     protected ProgressBar progressBar;
     @FXML
@@ -49,18 +56,17 @@ public class AudioConverterController {
     protected Label titleLabel;
 
     private ExecutorService exec;
-    private final AudioConverterService converter;
+    private final ImageRenamerService renamer;
 
-    public AudioConverterController () {
-        this.converter = new AudioConverterService();
+    public ImageRenamerController() {
+        this.renamer = new ImageRenamerServiceImpl();
     }
 
-    // Add this method to the controller
     @FXML
     public void goToHome() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_HOME_FXML));
-            Stage stage = (Stage) convertButton.getScene().getWindow();
+            Stage stage = (Stage) renameButton.getScene().getWindow();
             Scene scene = new Scene(loader.load(), 900, 600);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.CSS_MAIN)).toExternalForm());
             stage.setScene(scene);
@@ -72,16 +78,25 @@ public class AudioConverterController {
 
     @FXML
     public void initialize() {
-        formatCombo.setItems(FXCollections.observableArrayList(Constants.SUPPORTED_FORMATS));
-        progressBar.setProgress(INITIAL_PROGRESS_OF_CONVERSION);
+        schemaCombo.setItems(FXCollections.observableArrayList(Constants.IMAGE_SCHEMAS));
+        // Set default format to yyyy_MM_dd_HH-mm-ss
+        schemaCombo.getSelectionModel().select(0);
+        progressBar.setProgress(INITIAL_PROGRESS);
+        groupByYear.setSelected(true);
+        groupByMonth.setSelected(true);
         FontUtils.loadAndApplyNunitoFont(
-                titleLabel, convertButton, inputField, outputField, formatCombo, logArea
+                titleLabel, renameButton, inputField, outputField, schemaCombo, logArea
         );
     }
 
     @FXML
     public void chooseInputFile() {
-        var fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Media Files",
+                        "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp", "*.tiff", "*.tif", "*.webp",
+                        "*.mp4", "*.avi", "*.mov", "*.wmv", "*.flv", "*.mkv", "*.webm", "*.m4v", "*.mpg", "*.mpeg")
+        );
         var file = fileChooser.showOpenDialog(inputField.getScene().getWindow());
         if (file != null) inputField.setText(file.getAbsolutePath());
     }
@@ -101,37 +116,43 @@ public class AudioConverterController {
     }
 
     @FXML
-    public void convert() {
+    public void rename() {
         logArea.clear();
         String in = inputField.getText();
         String out = outputField.getText();
-        String fmt = formatCombo.getValue();
-        if (in == null || in.isBlank() || out == null || out.isBlank() || fmt == null || fmt.isBlank()) {
+        String schema = schemaCombo.getValue();
+
+        if (in == null || in.isBlank() || out == null || out.isBlank() || schema == null || schema.isBlank()) {
             alertWrongData();
             return;
         }
+
+        boolean groupYear = groupByYear.isSelected();
+        boolean groupMonth = groupByMonth.isSelected();
+        boolean groupDay = groupByDay.isSelected();
+
         progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
-        convertButton.setDisable(true);
+        renameButton.setDisable(true);
         exec = Executors.newSingleThreadExecutor();
-        exec.submit(() -> runConversion(in, out, fmt));
+        exec.submit(() -> runRenaming(in, out, schema, groupYear, groupMonth, groupDay));
     }
 
-    private void runConversion(String in, String out, String fmt) {
+    private void runRenaming(String in, String out, String schema, boolean groupYear, boolean groupMonth, boolean groupDay) {
         try {
-            appendLog(Constants.LOG_STARTING + "\n");
-            converter.convert(Path.of(in), Path.of(out), fmt, getListener());
-            appendLog(Constants.LOG_FINISHED + "\n");
+            appendLog(Constants.LOG_STARTING_RENAME + "\n");
+            renamer.renameImages(in, out, schema, groupYear, groupMonth, groupDay, getListener());
+            appendLog(Constants.LOG_FINISHED_RENAME + "\n");
         } catch (Exception e) {
-            log.error("Conversion error", e);
+            log.error("Renaming error", e);
             appendLog(Constants.LOG_ERROR_GENERIC_PREFIX + e.getMessage() + "\n");
         } finally {
-            Platform.runLater(() -> convertButton.setDisable(false));
+            Platform.runLater(() -> renameButton.setDisable(false));
             exec.shutdown();
         }
     }
 
-    private ConversionListener getListener() {
-        return new ConversionListener() {
+    private RenamerListener getListener() {
+        return new RenamerListener() {
             int total = 0;
 
             @Override
@@ -141,14 +162,14 @@ public class AudioConverterController {
             }
 
             @Override
-            public void onFileDone(Path input, Path output, int done, int t) {
-                appendLog(Constants.LOG_DONE_PREFIX + input + " -> " + output + "\n");
+            public void onFileDone(String input, String output, int done, int t) {
+                appendLog(Constants.LOG_RENAME_DONE_PREFIX + input + " -> " + output + "\n");
                 updateProgress(done, total);
             }
 
             @Override
-            public void onError(Path input, Exception e, int done, int t) {
-                appendLog(Constants.LOG_ERROR_PREFIX + input + " :: " + e.getMessage() + "\n");
+            public void onError(String input, Exception e, int done, int t) {
+                appendLog(Constants.LOG_RENAME_ERROR_PREFIX + input + " :: " + e.getMessage() + "\n");
                 updateProgress(done, total);
             }
 
@@ -163,6 +184,6 @@ public class AudioConverterController {
     }
 
     private void alertWrongData() {
-        new Alert(Alert.AlertType.WARNING, Constants.MSG_SELECT_INPUT_OUTPUT_FORMAT, ButtonType.OK).showAndWait();
+        new Alert(Alert.AlertType.WARNING, Constants.MSG_SELECT_INPUT_OUTPUT_SCHEMA, ButtonType.OK).showAndWait();
     }
 }

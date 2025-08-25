@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.features.audio.converter.view.AudioConverterController" spacing="12">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.features.image.renamer.view.ImageRenamerController" spacing="12">
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Button onAction="#goToHome" styleClass="home-button">
             <graphic>
@@ -15,7 +15,7 @@
         </Button>
     </HBox>
     <HBox alignment="CENTER" spacing="10">
-    <Label fx:id="titleLabel" text="Audio Converter" styleClass="title" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+        <Label fx:id="titleLabel" text="Media File Renamer" styleClass="title" HBox.hgrow="ALWAYS" alignment="CENTER"/>
     </HBox>
     <GridPane hgap="8" vgap="8">
         <columnConstraints>
@@ -35,12 +35,19 @@
             <Button text="Choose" onAction="#chooseOutputDir"/>
         </HBox>
 
-        <Label text="Target format" GridPane.rowIndex="2"/>
-        <ComboBox fx:id="formatCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Naming Schema" GridPane.rowIndex="2"/>
+        <ComboBox fx:id="schemaCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Group By" GridPane.rowIndex="3"/>
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="3" spacing="10">
+            <CheckBox fx:id="groupByYear" text="Year"/>
+            <CheckBox fx:id="groupByMonth" text="Month"/>
+            <CheckBox fx:id="groupByDay" text="Day"/>
+        </HBox>
     </GridPane>
 
     <HBox spacing="8">
-        <Button fx:id="convertButton" text="Convert" onAction="#convert"/>
+        <Button fx:id="renameButton" text="Rename" onAction="#rename"/>
         <ProgressBar fx:id="progressBar" prefWidth="500"/>
     </HBox>
 

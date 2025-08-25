@@ -1,4 +1,4 @@
-package com.opsify.audio.converter.service;
+package com.opsify.features.audio.converter.service;
 
 import java.nio.file.Path;
 
