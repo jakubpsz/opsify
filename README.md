@@ -20,16 +20,6 @@ Tech stack
 - JUnit 5 + AssertJ + Mockito for tests
 - Maven
 
-Project structure
-- src/main/java/com/opsify/app/AudioConverterApp.java: JavaFX entry point
-- src/main/java/com/opsify/controller/MainController.java: UI controller
-- src/main/java/com/opsify/service/FfmpegAudioConverter.java: conversion service
-- src/main/java/com/opsify/service/ConversionListener.java: progress listener interface
-- src/main/java/com/opsify/util/PathAudioUtil.java: path utilities
-- src/main/java/com/opsify/util/Constants.java: common constants
-- src/main/resources/fxml/main.fxml: UI
-- src/main/resources/css/style.css: styling
-
 Build
 - mvn -q -DskipTests package
 
