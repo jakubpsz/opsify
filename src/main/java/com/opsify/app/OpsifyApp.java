@@ -1,11 +1,11 @@
-package com.opsify;
+package com.opsify.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import com.opsify.constants.Constants;
+import com.opsify.utils.Constants;
 
 import java.util.Objects;
 

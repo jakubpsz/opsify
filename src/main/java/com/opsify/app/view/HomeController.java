@@ -1,7 +1,6 @@
-package com.opsify.home;
+package com.opsify.app.view;
 
-import com.opsify.OpsifyApp;
-import com.opsify.constants.Constants;
+import com.opsify.utils.Constants;
 import com.opsify.utils.FontUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

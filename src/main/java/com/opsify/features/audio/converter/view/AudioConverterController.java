@@ -1,8 +1,8 @@
-package com.opsify.audio.converter.controller;
+package com.opsify.features.audio.converter.view;
 
-import com.opsify.audio.converter.service.AudioConverterService;
-import com.opsify.audio.converter.service.ConversionListener;
-import com.opsify.constants.Constants;
+import com.opsify.features.audio.converter.service.AudioConverterServiceImpl;
+import com.opsify.features.audio.converter.service.ConversionListener;
+import com.opsify.utils.Constants;
 import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -49,10 +49,10 @@ public class AudioConverterController {
     protected Label titleLabel;
 
     private ExecutorService exec;
-    private final AudioConverterService converter;
+    private final AudioConverterServiceImpl converter;
 
     public AudioConverterController () {
-        this.converter = new AudioConverterService();
+        this.converter = new AudioConverterServiceImpl();
     }
 
     // Add this method to the controller

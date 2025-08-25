@@ -1,5 +1,7 @@
-package com.opsify.audio.converter.service;
+package com.opsify.features.audio.converter.service;
 
+import com.opsify.features.audio.converter.service.AudioConverterServiceImpl;
+import com.opsify.features.audio.converter.service.ConversionListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -12,14 +14,14 @@ import java.nio.file.Path;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class AudioConverterServiceTest {
+class AudioConverterServiceImplTest {
 
-    private AudioConverterService service;
+    private AudioConverterServiceImpl service;
     private ConversionListener listener;
 
     @BeforeEach
     void setUp() {
-        service = spy(new AudioConverterService()); // spy to override transcodeAudio
+        service = spy(new AudioConverterServiceImpl()); // spy to override transcodeAudio
         listener = mock(ConversionListener.class);
     }
 

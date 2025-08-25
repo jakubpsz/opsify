@@ -1,9 +1,9 @@
-package com.opsify.image.renamer.controller;
+package com.opsify.features.image.renamer.view;
 
-import com.opsify.constants.Constants;
-import com.opsify.image.renamer.service.ImageRenamerService;
-import com.opsify.image.renamer.service.ImageRenamerServiceImpl;
-import com.opsify.image.renamer.service.RenamerListener;
+import com.opsify.utils.Constants;
+import com.opsify.features.image.renamer.service.ImageRenamerService;
+import com.opsify.features.image.renamer.service.ImageRenamerServiceImpl;
+import com.opsify.features.image.renamer.service.RenamerListener;
 import com.opsify.utils.FontUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -82,6 +82,8 @@ public class ImageRenamerController {
         // Set default format to yyyy_MM_dd_HH-mm-ss
         schemaCombo.getSelectionModel().select(0);
         progressBar.setProgress(INITIAL_PROGRESS);
+        groupByYear.setSelected(true);
+        groupByMonth.setSelected(true);
         FontUtils.loadAndApplyNunitoFont(
                 titleLabel, renameButton, inputField, outputField, schemaCombo, logArea
         );

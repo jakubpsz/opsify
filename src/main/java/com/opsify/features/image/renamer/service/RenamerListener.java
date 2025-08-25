@@ -1,4 +1,4 @@
-package com.opsify.image.renamer.service;
+package com.opsify.features.image.renamer.service;
 
 public interface RenamerListener {
     void onStart(int total);

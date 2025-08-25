@@ -1,31 +1,23 @@
-package com.opsify.image.renamer.service;
+package com.opsify.features.image.renamer.service;
 
 import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Directory;
+import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
+import com.drew.metadata.file.FileSystemDirectory;
+import com.drew.metadata.mov.QuickTimeDirectory;
+import com.drew.metadata.mp4.Mp4Directory;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.sax.BodyContentHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 public class ImageRenamerServiceImpl implements ImageRenamerService {
@@ -83,57 +75,14 @@ public class ImageRenamerServiceImpl implements ImageRenamerService {
                 VIDEO_EXTENSIONS.stream().anyMatch(fileName::endsWith);
     }
 
-    private boolean isImageFile(Path path) {
-        String fileName = path.getFileName().toString().toLowerCase();
-        return IMAGE_EXTENSIONS.stream().anyMatch(fileName::endsWith);
-    }
-
-    private boolean isVideoFile(Path path) {
-        String fileName = path.getFileName().toString().toLowerCase();
-        return VIDEO_EXTENSIONS.stream().anyMatch(fileName::endsWith);
-    }
-
     private void processMediaFile(Path mediaFile, Path outputRoot, String schema,
                                   boolean groupByYear, boolean groupByMonth, boolean groupByDay) throws Exception {
         // Get file modification time
-        Map<String, String> metadata = null;
-        if (isImageFile(mediaFile)) {
-            metadata = extractImageMetadata(mediaFile);
-        } else if (isVideoFile(mediaFile)) {
-            metadata = extractVideoMetadata(mediaFile);
-        }
-        String dateStr = metadata.get("Date/Time Original"); // most common for images
-        if (dateStr == null) dateStr = metadata.get("date"); // fallback for videos
-        if (dateStr == null) dateStr = metadata.get("dcterms:created"); // some containers
-
-        Date date;
-
-        if (dateStr != null) {
-            try {
-                if (dateStr.contains("T") && dateStr.endsWith("Z")) {
-                    // ISO 8601 style → Instant.parse
-                    Instant instant = Instant.parse(dateStr);
-                    date = Date.from(instant);
-                } else {
-                    // EXIF style → yyyy:MM:dd HH:mm:ss
-                    SimpleDateFormat exifFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-                    date = exifFormat.parse(dateStr);
-                }
-            } catch (ParseException | IllegalArgumentException e) {
-                // Fallback to file attributes if parsing fails
-                BasicFileAttributes attrs = Files.readAttributes(mediaFile, BasicFileAttributes.class);
-                date = new Date(attrs.lastModifiedTime().toMillis());
-            }
-        } else {
-            // No metadata date → fallback to filesystem modified time
-            BasicFileAttributes attrs = Files.readAttributes(mediaFile, BasicFileAttributes.class);
-            date = new Date(attrs.lastModifiedTime().toMillis());
-        }
+        Date date = extractOriginalCreationDate(mediaFile);
 
         // Format for filename
         SimpleDateFormat format = new SimpleDateFormat(schema);
         String newName = format.format(date);
-        System.out.println("New filename date part: " + newName);
 
         // Get file extension
         String fileName = mediaFile.getFileName().toString();
@@ -155,38 +104,68 @@ public class ImageRenamerServiceImpl implements ImageRenamerService {
 
         // Copy the file with metadata preservation
         Files.copy(mediaFile, outputFile, StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING);
-//        ObjectMapper mapper = new ObjectMapper();
-//        Path jsonFile = outputFile.resolve(mediaFile.getFileName().toString() + ".json");
-//        mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile.toFile(), metadata);
     }
 
-    public static Map<String, String> extractImageMetadata(Path path) throws Exception {
-        Map<String, String> map = new LinkedHashMap<>();
-        try (InputStream is = Files.newInputStream(path)) {
-            Metadata metadata = ImageMetadataReader.readMetadata(is);
-            for (Directory dir : metadata.getDirectories()) {
-                for (Tag tag : dir.getTags()) {
-                    map.put(tag.getTagName(), tag.getDescription());
+    public Date extractOriginalCreationDate(Path filePath) throws ImageProcessingException, IOException {
+            if (filePath == null || !Files.exists(filePath) || !Files.isRegularFile(filePath)) {
+                return null;
+            }
+
+            Metadata metadata = ImageMetadataReader.readMetadata(filePath.toFile());
+
+            // Try to get the date from various metadata sources in order of preference
+
+            // 1. EXIF metadata (for images - JPEG, TIFF, RAW formats)
+            ExifSubIFDDirectory exifDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+            if (exifDirectory != null) {
+                Date date = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                if (date != null) {
+                    return date;
+                }
+
+                // Fallback to other EXIF date tags
+                date = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME);
+                if (date != null) {
+                    return date;
                 }
             }
-        }
-        return map;
-    }
 
-    // Extract metadata for videos
-    public static Map<String, String> extractVideoMetadata(Path path) throws Exception {
-        Map<String, String> map = new LinkedHashMap<>();
-        try (InputStream is = Files.newInputStream(path)) {
-            org.apache.tika.metadata.Metadata metadata = new org.apache.tika.metadata.Metadata();
-            AutoDetectParser parser = new AutoDetectParser();
-            parser.parse(is, new BodyContentHandler(), metadata, new ParseContext());
-
-            for (String name : metadata.names()) {
-                map.put(name, metadata.get(name));
+            // 2. MP4 metadata (for MP4 videos)
+            Mp4Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
+            if (mp4Directory != null) {
+                Date date = mp4Directory.getDate(Mp4Directory.TAG_CREATION_TIME);
+                if (date != null) {
+                    return date;
+                }
             }
-        }
-        return map;
+
+            // 3. QuickTime metadata (for MOV and other QuickTime formats)
+            QuickTimeDirectory quickTimeDirectory = metadata.getFirstDirectoryOfType(QuickTimeDirectory.class);
+            if (quickTimeDirectory != null) {
+                Date date = quickTimeDirectory.getDate(QuickTimeDirectory.TAG_CREATION_TIME);
+                if (date != null) {
+                    return date;
+                }
+
+                date = quickTimeDirectory.getDate(QuickTimeDirectory.TAG_MODIFICATION_TIME);
+                if (date != null) {
+                    return date;
+                }
+            }
+
+            // 4. File system metadata (fallback)
+            FileSystemDirectory fileSystemDirectory = metadata.getFirstDirectoryOfType(FileSystemDirectory.class);
+            if (fileSystemDirectory != null) {
+                Date date = fileSystemDirectory.getDate(FileSystemDirectory.TAG_FILE_MODIFIED_DATE);
+                if (date != null) {
+                    return date;
+                }
+            }
+
+            return new Date(Files.getLastModifiedTime(filePath).toMillis());
+
     }
+    // Extract metadata for videos
 
     private Path buildOutputDirectory(Path outputRoot, Date date,
                                       boolean groupByYear, boolean groupByMonth, boolean groupByDay) {

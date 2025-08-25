@@ -1,4 +1,4 @@
-package com.opsify.image.renamer.service;
+package com.opsify.features.image.renamer.service;
 
 public interface ImageRenamerService {
     void renameImages(String inputPath, String outputPath, String schema,

@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.audio.converter.controller.AudioConverterController" spacing="12">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.features.audio.converter.view.AudioConverterController" spacing="12">
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Button onAction="#goToHome" styleClass="home-button">
             <graphic>
