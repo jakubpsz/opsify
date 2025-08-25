@@ -3,6 +3,7 @@ package com.opsify.utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -68,7 +69,7 @@ class FontUtilsTest extends ApplicationTest {
     @Test
     void testLoadAndApplyNunitoFont_nullInputs_shouldThrowException() {
         assertThatThrownBy(() ->
-                FontUtils.loadAndApplyNunitoFont(null, null, null, null, null, null)
+                FontUtils.loadAndApplyNunitoFont(null, null, null, null, (ListView<String>) null, null)
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("UI components cannot be null when applying fonts");
     }
