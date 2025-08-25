@@ -3,7 +3,7 @@
 <div align="center">
     <img src="docs/logo.png" alt="Audio Converter Logo" width="150" />
 </div>
-JavaFX desktop application for batch audio conversion using JavaCV (bundled FFmpeg). Includes progress reporting and logging.
+JavaFX desktop application for processing different media files and documents
 
 Features
 - Convert a single file or whole directories recursively
