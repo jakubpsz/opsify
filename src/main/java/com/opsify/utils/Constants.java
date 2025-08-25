@@ -15,6 +15,7 @@ public final class Constants {
     // Resources
     public static final String FXML_AUDIO_CONVERTER_FXML = "/fxml/audio-converter.fxml";
     public static final String FXML_IMAGE_RENAMER_FXML = "/fxml/image-renamer.fxml";
+    public static final String FXML_PDF_JOINER_FXML = "/fxml/pdf-joiner.fxml";
     public static final String FXML_HOME_FXML = "/fxml/home.fxml";
     public static final String CSS_MAIN = "/css/style.css";
 

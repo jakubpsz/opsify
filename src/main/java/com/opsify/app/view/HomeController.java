@@ -48,9 +48,17 @@ public class HomeController {
     }
 
     @FXML
-    public void navigateToPlaceholder() {
-        // Placeholder for future implementations
-        System.out.println("This feature is coming soon!");
+    public void navigateToPdfJoiner() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(Constants.FXML_PDF_JOINER_FXML));
+            Stage stage = (Stage) pdfJoinerBtn.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 900, 600);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(Constants.CSS_MAIN)).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("PDF Joiner - Opsify");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

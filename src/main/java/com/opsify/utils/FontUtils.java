@@ -3,6 +3,7 @@ package com.opsify.utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -65,6 +66,32 @@ public class FontUtils {
         }
     }
 
+    // New method for PDF joiner controller with ListView
+    public static void loadAndApplyNunitoFont(Label titleLabel, Button joinButton,
+                                              TextField outputDirField, TextField outputFileNameField,
+                                              ListView<String> filesListView, TextArea logArea) {
+        if (titleLabel == null || joinButton == null || outputDirField == null
+                || outputFileNameField == null || filesListView == null || logArea == null) {
+            throw new IllegalArgumentException("UI components cannot be null when applying fonts");
+        }
+
+        try {
+            Font nunitoRegular = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_REGULAR_TTF), 12);
+            Font nunitoBold = Font.loadFont(FontUtils.class.getResourceAsStream(FONTS_NUNITO_BOLD_TTF), 12);
+
+            if (nunitoRegular != null && nunitoBold != null) {
+                log.info("Nunito font loaded successfully");
+                applyNunitoStyles(titleLabel, joinButton, outputDirField, outputFileNameField, filesListView, logArea);
+            } else {
+                log.warn("Nunito font could not be loaded, using system fallback fonts");
+                useFallbackFonts(titleLabel, joinButton, outputDirField, outputFileNameField, filesListView, logArea);
+            }
+        } catch (Exception e) {
+            log.error("Error loading Nunito font: {}", e.getMessage());
+            useFallbackFonts(titleLabel, joinButton, outputDirField, outputFileNameField, filesListView, logArea);
+        }
+    }
+
     private static void applyNunitoStyles(Label titleLabel, Button... buttons) {
         titleLabel.setStyle("-fx-font-family: 'Nunito'; -fx-font-weight: bold; -fx-font-size: 24px;");
         for (Button button : buttons) {
@@ -98,6 +125,23 @@ public class FontUtils {
     }
 
     /**
+     * Applies Nunito font styles to PDF joiner components
+     */
+    private static void applyNunitoStyles(Label titleLabel, Button joinButton,
+                                          TextField outputDirField, TextField outputFileNameField,
+                                          ListView<String> filesListView, TextArea logArea) {
+        titleLabel.setStyle("-fx-font-family: 'Nunito'; -fx-font-weight: bold; -fx-font-size: 24px;");
+        joinButton.setStyle("-fx-font-family: 'Nunito'; -fx-font-weight: bold;");
+
+        // Apply to other text elements
+        String nunitoStyle = "-fx-font-family: 'Nunito';";
+        outputDirField.setStyle(nunitoStyle);
+        outputFileNameField.setStyle(nunitoStyle);
+        filesListView.setStyle(nunitoStyle);
+        logArea.setStyle(nunitoStyle);
+    }
+
+    /**
      * Applies fallback system fonts to UI components
      */
     private static void useFallbackFonts(Label titleLabel, Button convertButton,
@@ -109,6 +153,21 @@ public class FontUtils {
         outputField.setStyle(fallbackStyle);
         formatCombo.setStyle(fallbackStyle);
         convertButton.setStyle(fallbackStyle + "-fx-font-weight: bold;");
+        logArea.setStyle(fallbackStyle);
+    }
+
+    /**
+     * Applies fallback system fonts to PDF joiner components
+     */
+    private static void useFallbackFonts(Label titleLabel, Button joinButton,
+                                         TextField outputDirField, TextField outputFileNameField,
+                                         ListView<String> filesListView, TextArea logArea) {
+        String fallbackStyle = "-fx-font-family: 'Segoe UI', sans-serif;";
+        titleLabel.setStyle("-fx-font-family: 'Segoe UI', sans-serif; -fx-font-weight: bold; -fx-font-size: 24px;");
+        outputDirField.setStyle(fallbackStyle);
+        outputFileNameField.setStyle(fallbackStyle);
+        filesListView.setStyle(fallbackStyle);
+        joinButton.setStyle(fallbackStyle + "-fx-font-weight: bold;");
         logArea.setStyle(fallbackStyle);
     }
 

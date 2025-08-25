@@ -21,7 +21,7 @@
         <Button fx:id="imageRenamerBtn" text="Media File Renamer" onAction="#navigateToImageRenamer"
                 GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="tile-button"/>
 
-        <Button fx:id="pdfJoinerBtn" text="PDF Joiner" onAction="#navigateToPlaceholder"
+        <Button fx:id="pdfJoinerBtn" text="PDF Joiner" onAction="#navigateToPdfJoiner"
                 GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="tile-button"/>
     </GridPane>
 </VBox>
