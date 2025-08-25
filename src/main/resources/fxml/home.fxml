@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.opsify.app.view.HomeController" spacing="20" alignment="CENTER">
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
@@ -16,12 +17,39 @@
         </columnConstraints>
 
         <Button fx:id="audioConverterBtn" text="Audio Converter" onAction="#navigateToAudioConverter"
-                GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="tile-button"/>
+                GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="tile-button">
+            <graphic>
+                <VBox alignment="TOP_CENTER" spacing="5">
+                    <ImageView fitWidth="50" fitHeight="50" preserveRatio="true">
+                        <Image url="@/icons/audio_converter.png" />
+                    </ImageView>
+                </VBox>
+            </graphic>
+            <contentDisplay>TOP</contentDisplay>
+        </Button>
 
         <Button fx:id="imageRenamerBtn" text="Media File Renamer" onAction="#navigateToImageRenamer"
-                GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="tile-button"/>
+                GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="tile-button">
+            <graphic>
+                <VBox alignment="TOP_CENTER" spacing="5">
+                    <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                        <Image url="@/icons/image_renamer.png" />
+                    </ImageView>
+                </VBox>
+            </graphic>
+            <contentDisplay>TOP</contentDisplay>
+        </Button>
 
         <Button fx:id="pdfJoinerBtn" text="PDF Joiner" onAction="#navigateToPdfJoiner"
-                GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="tile-button"/>
+                GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="tile-button">
+            <graphic>
+                <VBox alignment="TOP_CENTER" spacing="5">
+                    <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                        <Image url="@/icons/pdf_joiner.png" />
+                    </ImageView>
+                </VBox>
+            </graphic>
+            <contentDisplay>TOP</contentDisplay>
+        </Button>
     </GridPane>
 </VBox>

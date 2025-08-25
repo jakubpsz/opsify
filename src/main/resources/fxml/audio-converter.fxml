@@ -8,14 +8,17 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Button onAction="#goToHome" styleClass="home-button">
             <graphic>
-                <ImageView fitWidth="20" fitHeight="20">
+                <ImageView fitWidth="30" fitHeight="30">
                     <Image url="@/icons/home.png"/>
                 </ImageView>
             </graphic>
         </Button>
     </HBox>
     <HBox alignment="CENTER" spacing="10">
-    <Label fx:id="titleLabel" text="Audio Converter" styleClass="title" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+        <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+            <Image url="@/icons/audio_converter.png" />
+        </ImageView>
+        <Label fx:id="titleLabel" text="Audio Converter" styleClass="title" HBox.hgrow="ALWAYS" alignment="CENTER"/>
     </HBox>
     <GridPane hgap="8" vgap="8">
         <columnConstraints>
